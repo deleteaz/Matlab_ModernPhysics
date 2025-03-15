@@ -13,6 +13,7 @@
 clc;clear;close all;
 
 atom_size = 100;
+time = 30;
 [x_SF1, x_SF2, y_SF1, y_SF2] = Initialize(atom_size);
 AtomDraw(atom_size, x_SF1, x_SF2, y_SF1, y_SF2);
 [x_SF1, x_SF2, y_SF1, y_SF2, x_PF1, x_PF2, y_PF1, y_PF2] = ...
