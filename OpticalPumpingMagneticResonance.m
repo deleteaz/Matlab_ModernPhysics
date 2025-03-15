@@ -6,14 +6,17 @@
 % Version:  Matlab2022b
 % Config:   AMD Ryzen7 6800H && RTX3060
 % Usage:    1.no need to change anything, just run.
-%           2.atom_size: Control the number of atom.
-%           3.time: Control the time of optical pumping.
+%           2.atom_size: int, Control the number of atom.
+%           3.time: int, Control the time of optical pumping.
+%           4.voltage_type: string, Control the shape of voltage, there are two
+%           types: "square" and "triangle".
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clc;clear;close all;
-
 atom_size = 100;
 time = 30;
+voltagetype = "square";
+
 [x_SF1, x_SF2, y_SF1, y_SF2] = Initialize(atom_size);
 AtomDraw(atom_size, x_SF1, x_SF2, y_SF1, y_SF2);
 [x_SF1, x_SF2, y_SF1, y_SF2, x_PF1, x_PF2, y_PF1, y_PF2] = ...
@@ -23,9 +26,9 @@ AtomDraw(atom_size, x_SF1, x_SF2, y_SF1, y_SF2, x_PF1, x_PF2, y_PF1, y_PF2);
     DeExcitedTransition(x_SF1, x_SF2, y_SF1, y_SF2, x_PF1, x_PF2, y_PF1, y_PF2);
 AtomDraw(atom_size, x_SF1, x_SF2, y_SF1, y_SF2, x_PF1, x_PF2, y_PF1, y_PF2);
 
-OpticalPumping(100, 30)
+OpticalPumping(atom_size, time)
 
-OpticalPumpMagneticResonance(100, 30, "T")
+OpticalPumpMagneticResonance(atom_size, time, voltagetype)
 
 function [x_SF1, x_SF2, y_SF1, y_SF2] = Initialize(atom_size) 
 %原子初始化
@@ -213,12 +216,12 @@ yline(0)
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function OpticalPumpMagneticResonance(atom_size, time, VoltageType)
+function OpticalPumpMagneticResonance(atom_size, time, voltage_type)
 %光泵磁共振
 arguments
     atom_size int32 = 100;
     time double = 30;
-    VoltageType = "square"
+    voltage_type = "square"
 end
 %原子初始化
 [x_SF1, x_SF2, y_SF1, y_SF2] = Initialize(atom_size);
@@ -235,7 +238,7 @@ for i = 1:2*time
     [x_SF1, x_SF2, y_SF1, y_SF2, x_PF1, x_PF2, y_PF1, y_PF2, light_I(i+1,2)] = ...
         DeExcitedTransition(x_SF1, x_SF2, y_SF1, y_SF2, x_PF1, x_PF2, y_PF1, y_PF2);
     %电压变换
-    if (VoltageType == "square") || (VoltageType == "Square")
+    if (voltage_type == "square")
         %方波电压变换
         if i == time
             magnet = length([y_SF1;y_SF2]);
@@ -286,7 +289,7 @@ figure()
 hold on
 x = [1:size(light_I,1)-1]';
 plot(light_I(:,1),"LineWidth",2)
-if (VoltageType == "square") || (VoltageType == "Square")
+if (voltage_type == "square")
     plot(x, 5 * [ones(size(x,1)/2, 1); -ones(size(x,1)/2, 1)],"Color", [1,0.5,0.3], "LineWidth", 2)
 else
     plot(x, 15 * [k*x(1:time/2); 2-k*x(time/2+1:time); 2-k*x(time+1:3/2*time); k*x(3/2*time+1:end)-4],"Color", [1,0.5,0.3], "LineWidth", 2)
