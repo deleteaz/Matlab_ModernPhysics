@@ -6,10 +6,11 @@
 % Version:  Matlab2022b
 % Config:   AMD Ryzen7 6800H && RTX3060
 % Usage:    1.no need to change anything, just run.
-%           2.atom_size: int, Control the number of atom.
-%           3.time: int, Control the time of optical pumping.
-%           4.voltage_type: string, Control the shape of voltage, there are two
-%           types: "square" and "triangle".
+%           2.n1: float, Refractive index of medium 1.
+%           3.n2: float, Refractive index of medium 2.
+%           4.degree: float, The Angle of the incident light with respect
+%           to the X-axis.
+%           5.time: int, The time the light travels.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clc;clear;close all;
