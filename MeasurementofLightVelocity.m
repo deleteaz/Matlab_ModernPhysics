@@ -22,7 +22,6 @@ time = 15;
 
 figure()
 hold on
-xlim([2,18])
 ylim([0,0.1])
 [x1, y1, x2, t2, y2, y3] = Initialize_i(degree, n1, n2);
 for i = 1:time
@@ -33,6 +32,8 @@ LightDraw_i(x1, t1, y1, x2, t2, time)
 
 [x1o, t1o, y1o, x2o, t2o, y2o, y3o] = Loop_o(x1, t1, y3, n1, n2);
 LightDraw_o(x1o, t1o, y1o, x2o, t2o, time)
+drawnow()
+pause(0.1)
 end
 
 function [x1, y1, x2, t2, y2, y3] = Initialize_i(degree, n1, n2)
