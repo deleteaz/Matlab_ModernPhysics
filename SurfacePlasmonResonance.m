@@ -1,25 +1,24 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Surface Plasmon Resonance
-
-% Author:   Deleteaz
-% Email:    3011860885@qq.com
-% Version:  Matlab2022b
-% Config:   AMD Ryzen7 6800H && RTX3060
-% Usage:    1.no need to change anything, just run.
-%           2.t_step: float, Control the step of the time.
-%           3.t_end: int, Control the end of time.
-%           4.display: int, Control the drawing type, there are two
-%           types: "0" and "1".
-%           5.omega: float, Control the fequency of light.
-%           6.fai: float, Control the light of phase.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clc;clear;close all;
 t_step = 0.5;
 t_end = 25;
 display = 0;
+electron_single(t_step, t_end, display);
 
+t_step = 0.05;
+omega = 5;
+fai = 4;
+display = 1;
+electron_group(t_step, omega, fai, display);
+
+display = 1;
+SurfacePlasmonResonance(display);
+
+function electron_single(t_step, t_end, display)
+arguments
+    t_step double = 0.5;
+    t_end int32 = 25;
+    display = 1;
+end
 % Drude模型(电子在电磁场与库仑力的耦合作用下进行振荡行为)
 % dp/dt = -qE- qvxB - p/tao;
 % m(y'') = -qE - q(y')xB - m(y')/tao
@@ -59,14 +58,15 @@ for i = 1:t_end
         end
     end
 end
+end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-clc;clear;close all;
-t_step = 0.05;
-omega = 5;
-fai = 4;
-display = 1;
-
+function electron_group(t_step, omega, fai, display)
+arguments
+    t_step double = 0.05;
+    omega double = 5;
+    fai double = 4;
+    display = 1;
+end
 % 电子集体振荡行为与光的耦合
 x0 = [1:t_step:pi]'; x1 = [pi+t_step:t_step:2*pi]'; x2 = [2*pi+t_step:t_step:3*pi]';
 x = [x0; x1; x2];
@@ -101,78 +101,82 @@ for i = 1:50
         pause(0.1)
     end
 end
+end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function SurfacePlasmonResonance(display)
+arguments
+    display = 1;
+end
 % Citation：
 % 表面等离子共振效应中传统近似理论与薄膜光学理论
 % doi:１０．３７８８／ｇｚｘｂ２０１０３９０７．１２１６
 % Warning: I have changed the parameters.
-clc;clear;close all;
-lambda = 632.8 * 1e-9; % Wavelength
-epsilon0 = 1.516^2; % Prism
-epsilon1 = -8.5 + 0.7i; % Metal
-epsilon2 = 1.33^2; % Medium
-d = 50 * 1e-9; % Distance from metal to medium
+if display == 1
+    lambda = 632.8 * 1e-9; % Wavelength
+    epsilon0 = 1.516^2; % Prism
+    epsilon1 = -8.5 + 0.7i; % Metal
+    epsilon2 = 1.33^2; % Medium
+    d = 50 * 1e-9; % Distance from metal to medium
 
-theta_test = [50:0.005:95]';
-R_theta = zeros(size(theta_test));
+    theta_test = [50:0.005:95]';
+    R_theta = zeros(size(theta_test));
 
-for i = 1:length(theta_test)
-theta = pi/180 * theta_test(i); %incident angle（°）
+    for i = 1:length(theta_test)
+        theta = pi/180 * theta_test(i); %incident angle（°）
 
-k0x = (2*pi/lambda)*sqrt(epsilon0)*sin(theta);
-k0z = sqrt((2*pi/lambda)^2*epsilon0 - k0x^2);
-k1z = sqrt((2*pi/lambda)^2*epsilon1 - k0x^2);
-k2z = sqrt((2*pi/lambda)^2*epsilon2 - k0x^2);
+        k0x = (2*pi/lambda)*sqrt(epsilon0)*sin(theta);
+        k0z = sqrt((2*pi/lambda)^2*epsilon0 - k0x^2);
+        k1z = sqrt((2*pi/lambda)^2*epsilon1 - k0x^2);
+        k2z = sqrt((2*pi/lambda)^2*epsilon2 - k0x^2);
 
-r01 = (epsilon1*k0z - epsilon0*k1z) / (epsilon1*k0z + epsilon0*k1z);
-r12 = (epsilon2*k1z - epsilon1*k2z) / (epsilon2*k1z + epsilon1*k2z);
+        r01 = (epsilon1*k0z - epsilon0*k1z) / (epsilon1*k0z + epsilon0*k1z);
+        r12 = (epsilon2*k1z - epsilon1*k2z) / (epsilon2*k1z + epsilon1*k2z);
 
-r012 = (r01 + r12*exp(2i*k1z*d)) / (1 + r01*r12*exp(2i*k1z*d));
-R_theta(i,1) = abs(r012);
+        r012 = (r01 + r12*exp(2i*k1z*d)) / (1 + r01*r12*exp(2i*k1z*d));
+        R_theta(i,1) = abs(r012);
+    end
+    figure()
+    hold on
+    plot(theta_test,R_theta,"LineWidth",2,"Color",[0.3,0.5,1]);
+    grid on
+    xlabel("\theta(°)")
+    ylabel("Reflectivity")
+    ylim([0.1,1])
+else
+    % 未能复现
+    % Warning: it may has some bugs.
+    lambda = 632.8 * 1e-9;
+    epsilon1 = -18 + 0.7i;
+    d = 50 * 1e-9;
+    N0 = 3.24;
+    syms n1 k1
+    eqn1 = real(epsilon1) == n1^2 - k1^2;
+    eqn2 = imag(epsilon1) == 2*n1*k1;
+    [n1, k1] = solve([eqn1,eqn2]);
+    n1 = double(n1(1));
+    k1 = double(k1(1));
+    N1 = n1 - k1*1i;
+    N2 = 1;
+
+    theta_test = [34:0.01:35.4]';
+    R_thetav = zeros(size(theta_test));
+
+    for i = 1:length(theta_test)
+        theta0 = pi/180 * theta_test(i);
+        theta1 = asin(N0/N1*sin(theta0));
+        theta2 = asin(N1/N2*sin(theta1));
+
+        itar0 = N0/cos(theta0);
+        itar1 = N1/cos(theta1);
+        itar2 = N2/cos(theta2);
+        sigma1 = 2*pi*N1*d*cos(theta1)/lambda;
+        A = [[cos(sigma1), 1i/itar1*sin(sigma1)]; [1i*itar1*sin(sigma1), cos(sigma1)]] * [1; itar2];
+        B = A(1,1); C = A(2,1);
+
+        r = (itar0 - C/B) / (itar0 + C/B);
+        R_thetav(i,1) = abs(r)^2;
+    end
+    figure()
+    plot(theta_test,R_thetav,"LineWidth",2,"Color",[0.3,0.5,1]);
 end
-figure()
-hold on
-plot(theta_test,R_theta,"LineWidth",2,"Color",[0.3,0.5,1]);
-grid on
-xlabel("\theta(°)")
-ylabel("Reflectivity")
-ylim([0.1,1])
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 未能复现
-% Warning: it may has some bugs.
-clc;clear;close all;
-lambda = 632.8 * 1e-9;
-epsilon1 = -18 + 0.7i;
-d = 50 * 1e-9;
-N0 = 3.24;
-syms n1 k1
-eqn1 = real(epsilon1) == n1^2 - k1^2;
-eqn2 = imag(epsilon1) == 2*n1*k1;
-[n1, k1] = solve([eqn1,eqn2]);
-n1 = double(n1(1));
-k1 = double(k1(1));
-N1 = n1 - k1*1i;
-N2 = 1;
-
-theta_test = [34:0.01:35.4]';
-R_thetav = zeros(size(theta_test));
-
-for i = 1:length(theta_test)
-theta0 = pi/180 * theta_test(i);
-theta1 = asin(N0/N1*sin(theta0));
-theta2 = asin(N1/N2*sin(theta1));
-
-itar0 = N0/cos(theta0);
-itar1 = N1/cos(theta1);
-itar2 = N2/cos(theta2);
-sigma1 = 2*pi*N1*d*cos(theta1)/lambda;
-A = [[cos(sigma1), 1i/itar1*sin(sigma1)]; [1i*itar1*sin(sigma1), cos(sigma1)]] * [1; itar2];
-B = A(1,1); C = A(2,1);
-
-r = (itar0 - C/B) / (itar0 + C/B);
-R_thetav(i,1) = abs(r)^2;
 end
-figure()
-plot(theta_test,R_thetav,"LineWidth",2,"Color",[0.3,0.5,1]);
