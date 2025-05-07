@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Measurement of Light Velocity 
 
-% Author:   Deleteaz
+% Author:   ZhiXiang Wei
 % Email:    3011860885@qq.com
 % Version:  Matlab2022b
 % Config:   AMD Ryzen7 6800H && RTX3060
@@ -23,6 +23,7 @@ time = 15;
 figure()
 hold on
 ylim([0,0.1])
+%折射光
 [x1, y1, x2, t2, y2, y3] = Initialize_i(degree, n1, n2);
 for i = 1:time
 [x1, t1, y1, x2, t2, y2, y3] = Loop_i(x2, t2, y2, n1, n2);
@@ -30,6 +31,7 @@ block = min(x2);
 xline(block)
 LightDraw_i(x1, t1, y1, x2, t2, time)
 
+%二次反射光
 [x1o, t1o, y1o, x2o, t2o, y2o, y3o] = Loop_o(x1, t1, y3, n1, n2);
 LightDraw_o(x1o, t1o, y1o, x2o, t2o, time)
 drawnow()
