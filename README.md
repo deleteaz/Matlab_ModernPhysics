@@ -1,7 +1,7 @@
-Simulate the content of modern physics experiments and identify the sources of errors.
-\\
-A simple matlab program, just follow the tips in the program and run.
-\\
+\t Simulate the content of modern physics experiments and identify the sources of errors.
+\n
+\t A simple matlab program, just follow the tips in the program and run.
+\n
 ~ ( = - =) ~
-\\
-If it works for you, please give me a star.
+\n
+\t If it works for you, please give me a star.
