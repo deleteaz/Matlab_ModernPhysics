@@ -15,16 +15,18 @@
 close all;
 dk = T(c1:c2,1);
 I = T(c1:c2,2);
-pos = 556
-x = dk; yTrue = I;
-result = solvefit(x,yTrue,pos);
+pos = 556;
+[yTrue,ymin,ymax] = norm_minmax(I);
+x = dk;
+result = solvefit(x,yTrue,ymin,ymax,pos);
 dk1 = result(2)
 dk2 = result(5)
 
-function pop_gbest = solvefit(x,yTrue,pos)
-GER = 500;
+
+function pop_gbest = solvefit(x,yTrue,ymin,ymax,pos)
+GER = 800;
 IGER = 1;
-POP_SIZE = 200;
+POP_SIZE = 300;
 %x = [pa1,pb1,pc1,pa2,pb2,pc2,pd1]
 LB = [0,pos-2,0,  0,pos-2,0, -5];
 UB = [5,pos+2,0.8,5,pos+2,0.8,5];
@@ -95,10 +97,10 @@ set(gca,"FontSize",15,"FontWeight","bold")
 figure()
 hold on
 xfit = linspace(min(x),max(x),1000);
-y1 = pop_gbest(1)./((xfit-pop_gbest(2)).^2+pop_gbest(3));
-y2 = pop_gbest(4)./((xfit-pop_gbest(5)).^2+pop_gbest(6));
+y1 = pop_gbest(1)./((xfit-pop_gbest(2)).^2+pop_gbest(3)) + pop_gbest(7);
+y2 = pop_gbest(4)./((xfit-pop_gbest(5)).^2+pop_gbest(6)) + pop_gbest(7) ;
 yT = yTrue*(ymax - ymin) + ymin;
-y0Pred = (pop_gbest(7) + y1 + y2)*(ymax - ymin) + ymin;
+y0Pred = (-pop_gbest(7) + y1 + y2)*(ymax - ymin) + ymin;
 y1 = y1*(ymax - ymin) + ymin;
 y2 = y2*(ymax - ymin) + ymin;
 plot(x,yT,"LineWidth",1.2,"LineStyle","-","Marker",".")
@@ -125,4 +127,13 @@ pd1 = param(7);
 yPred = pd1 + pa1./((x-pb1).^2+pc1) + pa2./((x-pb2).^2+pc2);
 y = sqrt(sum((yTrue-yPred).^2)/length(yTrue));
 y_param = [pa1,pb1,pc1,pa2,pb2,pc2,pd1];
+end
+
+
+function [y,xmin,xmax] = norm_minmax(x, xmin, xmax)
+if nargin < 2
+xmin = min(x);
+xmax = max(x);
+end
+y = (x - xmin) ./ (xmax - xmin);
 end
