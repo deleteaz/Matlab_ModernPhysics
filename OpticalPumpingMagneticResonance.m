@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Optical pumping magnetic resonance
 
-% Author:   Deleteaz
+% Author:   ZhiXiang Wei
 % Email:    3011860885@qq.com
 % Version:  Matlab2022b
 % Config:   AMD Ryzen7 6800H && RTX3060
@@ -28,7 +28,7 @@ AtomDraw(atom_size, x_SF1, x_SF2, y_SF1, y_SF2, x_PF1, x_PF2, y_PF1, y_PF2);
 
 OpticalPumping(atom_size, time)
 
-OpticalPumpMagneticResonance(atom_size, time, voltagetype)
+CompleteProcess(atom_size, time, voltagetype)
 
 function [x_SF1, x_SF2, y_SF1, y_SF2] = Initialize(atom_size) 
 %原子初始化
@@ -177,7 +177,7 @@ ylim([-10,10])
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function OpticalPumping(atom_size, time)
+function CompleteProcess(atom_size, time)
 %光抽运
 arguments
     atom_size int32 = 100;
