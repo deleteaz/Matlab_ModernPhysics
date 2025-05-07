@@ -9,7 +9,7 @@
 %           2.t_step: float, the step of time.
 %           3.t_end: int, Control the time of single electron.
 %           4.display: int, which figure displayed.
-%           5.omega: int, the angular frequency of wave.
+%           5.omega: int, the angular velocity of wave.
 %           6.fai: int, the phase position of wave.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
