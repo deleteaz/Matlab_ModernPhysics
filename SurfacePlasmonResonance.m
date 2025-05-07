@@ -1,3 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Surface Plasmon Resonance
+
+% Author:   ZhiXiang Wei
+% Email:    3011860885@qq.com
+% Version:  Matlab2022b
+% Config:   AMD Ryzen7 6800H && RTX3060
+% Usage:    1.no need to change anything, just run.
+%           2.t_step: float, the step of time.
+%           3.t_end: int, Control the time of single electron.
+%           4.display: int, which figure displayed.
+%           5.omega: int, the angular frequency of wave.
+%           6.fai: int, the phase position of wave.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 clc;clear;close all;
 t_step = 0.5;
 t_end = 25;
@@ -11,7 +26,7 @@ display = 1;
 electron_group(t_step, omega, fai, display);
 
 display = 1;
-SurfacePlasmonResonance(display);
+CompleteProcess(display);
 
 function electron_single(t_step, t_end, display)
 arguments
@@ -103,7 +118,7 @@ for i = 1:50
 end
 end
 
-function SurfacePlasmonResonance(display)
+function CompleteProcess(display)
 arguments
     display = 1;
 end
