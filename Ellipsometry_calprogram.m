@@ -9,6 +9,7 @@
 %           2.P0_1, P0_2, A0_1, A0_2: float, extinction angle / polarization angle.
 %           3.phi1: float, incident angle.
 %           4.n1, n3: complex, refractive index of medium.
+%           5.d, n2: the final result.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clc;clear;close all;
