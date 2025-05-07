@@ -4,4 +4,5 @@ A simple matlab program, just follow the tips in the program and run.
 ~ ( = - =) ~  
 
 
-If it works for you, please give me a star.
+
+If it works for you, please give a star.
