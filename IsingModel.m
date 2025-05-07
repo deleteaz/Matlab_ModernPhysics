@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Ising Model
 
-% Author:   Deleteaz
+% Author:   ZhiXiang Wei
 % Email:    3011860885@qq.com
 % Version:  Matlab2022b
 % Config:   AMD Ryzen7 6800H && RTX3060
