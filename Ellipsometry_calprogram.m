@@ -7,9 +7,8 @@
 % Config:   AMD Ryzen7 6800H && RTX3060
 % Usage:    1.Please change P0_1,P0_2,A0_1,A0_2 before run.
 %           2.P0_1, P0_2, A0_1, A0_2: float, extinction angle / polarization angle.
-%           3.phi_1 = .
-%           4.t_end: int, when light out.
-%           5.dt: float, step of time.
+%           3.phi1: float, incident angle.
+%           4.n1, n3: complex, refractive index of medium.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clc;clear;close all;
@@ -20,10 +19,16 @@ P0_2 = 86.83; A0_2 = 141.73;
 phi1 = 69.87;
 n1 = 1;
 n3 = 3.882 - 1i*0.019;
-[psi_measure, Delta_measure] = Epcal(A0_1,P0_1,A0_2,P0_2)
-AreaPlot(n1,n3,phi1)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function solvefit(psi_measure,Delta_measure,phi1)
+
+[psi_measure, Delta_measure] = Epcal(A0_1,P0_1,A0_2,P0_2);
+
+AreaPlot(n1,n3,phi1);
+
+result = solvefit(psi_measure,Delta_measure,phi1);
+d = result(1)
+n2 = result(2)
+
+function [pop_gbest]= solvefit(psi_measure,Delta_measure,phi1)
 GER = 200;
 IGER = 1;
 POP_SIZE = 100;
@@ -70,7 +75,7 @@ while GER > IGER
     pop_cross = UB_id.*UB_reset + ~UB_id.*pop_cross;
 
     for i = 1:POP_SIZE
-        [fitness_param, fitness_cross] = fobj(pop_cross(i,:),[psi_measure,Delta_measure],psi1);
+        [fitness_param, fitness_cross] = fobj(pop_cross(i,:),[psi_measure,Delta_measure],phi1);
         if  fitness_cross < fitness(i)
             pop(i,:) = pop_cross(i,:);
             fitness(i) = fitness_cross;
@@ -99,6 +104,7 @@ xlabel("Iterations")
 ylabel("RMSE")
 yline(record(GER-1),"Color",[0.5,0.5,0.5],"LineWidth",1,"LineStyle","--")
 text(GER-GER*0.1,record(GER-1),num2str(record(GER-1)))
+end
 
 function [y_param, y] = fobj(param,yTrue,phi1)
 % Calculate Value
@@ -148,9 +154,7 @@ for i = 1:step
     for j = 1:step
         d = d_list(i);
         lambda = 632.8;
-        n1 = 1;
         n2 = n2_list(j);
-        n3 = 3.882 - 1i*0.019;
 
         phi2 = asind(n1/n2*sind(phi1));
         phi3 = asind(n1/n3*sind(phi1));
