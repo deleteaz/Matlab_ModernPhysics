@@ -1,26 +1,36 @@
-clc;clear;close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Ellipsometry
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Author:   ZhiXiang Wei
+% Email:    3011860885@qq.com
+% Version:  Matlab2022b
+% Config:   AMD Ryzen7 6800H && RTX3060
+% Usage:    1.Please change P0_1,P0_2,A0_1,A0_2 before run.
+%           2.P0_1, P0_2, A0_1, A0_2: float, extinction angle / polarization angle.
+%           3.phi_1 = .
+%           4.t_end: int, when light out.
+%           5.dt: float, step of time.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+clc;clear;close all;
 % Measurement Value
 % Extinction angle / polarization angle
-P0_1 = 117; A0_1 = 50;
-P0_2 = 87; A0_2 = 142;
+P0_1 = 177.33; A0_1 = 50.43;
+P0_2 = 86.83; A0_2 = 141.73;
+phi1 = 69.87;
 n1 = 1;
-n2 = param(2);
 n3 = 3.882 - 1i*0.019;
+[psi_measure, Delta_measure] = Epcal(A0_1,P0_1,A0_2,P0_2)
+AreaPlot(n1,n3,phi1)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Iterative parameter initialization
-tic
+function solvefit(psi_measure,Delta_measure,phi1)
 GER = 200;
 IGER = 1;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Solver initialization
 POP_SIZE = 100;
 DIM = 2;
 %x = [d,  n2]
 LB = [100,1];
 UB = [120,2];
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 muCR = 0.5;
 muSF = 0.5;
 pop = LB+(UB-LB).*rand(POP_SIZE,DIM);
@@ -29,7 +39,6 @@ fitness = inf*ones(POP_SIZE,1);
 fitness_gbest = inf;
 fitness_param_gbest = ones(1,DIM);
 record = zeros(GER-1,1);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 while GER > IGER
     r1 = randi([1,POP_SIZE],POP_SIZE,1);
     r2 = randi([1,POP_SIZE],POP_SIZE,1);
@@ -61,7 +70,7 @@ while GER > IGER
     pop_cross = UB_id.*UB_reset + ~UB_id.*pop_cross;
 
     for i = 1:POP_SIZE
-        [fitness_param, fitness_cross] = fobj(pop_cross(i,:),[psi_measure,Delta_measure],selection);
+        [fitness_param, fitness_cross] = fobj(pop_cross(i,:),[psi_measure,Delta_measure],psi1);
         if  fitness_cross < fitness(i)
             pop(i,:) = pop_cross(i,:);
             fitness(i) = fitness_cross;
@@ -78,7 +87,7 @@ while GER > IGER
     record(IGER) = fitness_gbest;
     IGER = IGER+1;
 end
-toc
+
 fprintf(['Measurement:\n psi: %.4f \tDelta: %.4f\n\n'...
     'Calculation(%.2fdeg):\n psi: %.4f \tDelta: %.4f\n\n' ...
     'd(膜厚): %.4fnm \tn2(薄膜折射率): %.4f'], ...
@@ -91,7 +100,7 @@ ylabel("RMSE")
 yline(record(GER-1),"Color",[0.5,0.5,0.5],"LineWidth",1,"LineStyle","--")
 text(GER-GER*0.1,record(GER-1),num2str(record(GER-1)))
 
-function [y_param, y] = fobj(param,yTrue,selection)
+function [y_param, y] = fobj(param,yTrue,phi1)
 % Calculate Value
 lambda = 632.8;
 d = param(1);
@@ -99,8 +108,6 @@ n1 = 1;
 n2 = param(2);
 n3 = 3.882 - 1i*0.019;
 
-phi1 = [69.87,64.9,59.94];
-phi1 = phi1(selection);
 phi2 = asind(n1/n2*sind(phi1));
 phi3 = asind(n1/n3*sind(phi1));
 r1p = (n2*cosd(phi1)-n1*cosd(phi2)) / (n2*cosd(phi1)+n1*cosd(phi2));
@@ -129,7 +136,7 @@ y = sqrt((yTrue(1)-psi)^2 + (yTrue(2)-Delta)^2);
 y_param = [psi, Delta];
 end
 
-function AreaPlot(n1,n2,n3)
+function AreaPlot(n1,n3,phi1)
 % Why Can't I use Newton's method
 step = 200;
 d_list = linspace(100,200,step);
@@ -145,8 +152,6 @@ for i = 1:step
         n2 = n2_list(j);
         n3 = 3.882 - 1i*0.019;
 
-        phi1 = [69.87,64.9,59.94];
-        phi1 = phi1(selection);
         phi2 = asind(n1/n2*sind(phi1));
         phi3 = asind(n1/n3*sind(phi1));
         r1p = (n2*cosd(phi1)-n1*cosd(phi2)) / (n2*cosd(phi1)+n1*cosd(phi2));
@@ -198,7 +203,7 @@ zlabel("G（反射系数比）")
 set(gca,"FontSize",15,"FontWeight","bold")
 end
 
-function Epcal(A0_1,P0_1,A0_2,P0_2)
+function [psi_measure, Delta_measure] = Epcal(A0_1,P0_1,A0_2,P0_2)
 % Ellipsoidal parameter
 if A0_1 > 90
     psi_measure_1 = 180 - A0_1; Delta_measure_1 = 2*P0_1 - 90;
