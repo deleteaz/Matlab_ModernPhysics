@@ -8,22 +8,26 @@
 % Usage:    1.Please change dk,I before run.
 %           2.dk: array, Raman Shift.
 %           3.I: array, light intensity.
-%           4.d, n2: the final result.
+%           4.pos: float, median Raman Shift of two peaks.
+%           5.dk1, dk2: the final result(Raman Shift).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 close all;
-dk = 1;
-I = 1;
-x = dk;
-yTrue = I;
+dk = T(c1:c2,1);
+I = T(c1:c2,2);
+pos = 556
+x = dk; yTrue = I;
+result = solvefit(x,yTrue,pos);
+dk1 = result(2)
+dk2 = result(5)
 
-function p()
+function pop_gbest = solvefit(x,yTrue,pos)
 GER = 500;
 IGER = 1;
 POP_SIZE = 200;
 %x = [pa1,pb1,pc1,pa2,pb2,pc2,pd1]
-LB = [0,554,0,  0,554,0, -5];
-UB = [5,558,0.8,5,558,0.8,5];
+LB = [0,pos-2,0,  0,pos-2,0, -5];
+UB = [5,pos+2,0.8,5,pos+2,0.8,5];
 DIM = length(LB);
 muCR = 0.5;
 muSF = 0.5;
