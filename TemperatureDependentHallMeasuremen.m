@@ -19,7 +19,7 @@ l_NC = 0.127*1e-3;
 long = 1.0*1e-3;
 a = 1.0*1e-3;
 d = 0.1*1e-3;
-corr = 1.93;
+corr = 1;
 % 数据导入
 UB = readmatrix("D:\100-Users\160-Desktop\变温霍尔效应\2025417\数据.xlsx", ...
     "Sheet","霍尔电阻电压磁场","Range",'B2:F1004');
@@ -54,8 +54,6 @@ rho = 1 ./ sigma;
 e = 1.602176634;% C
 n = corr ./ (R_n * e);
 p = corr ./ (R_p * e);
-% n = 1 ./ (R_n * e);
-% p = 1 ./ (R_p * e);
 
 % Mu_H
 mu_Hp = R_p .* sigma(1:2:end);
