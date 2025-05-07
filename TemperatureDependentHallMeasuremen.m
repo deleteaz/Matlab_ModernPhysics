@@ -5,12 +5,11 @@
 % Email:    3011860885@qq.com
 % Version:  Matlab2022b
 % Config:   AMD Ryzen7 6800H && RTX3060
-% Usage:    1.no need to change anything, just run.
-%           2.l_NC: float, poles distance.
-%           3.l: float, length of Hall sample.
-%           4.a: float, width of Hall sample.
-%           5.d: float, thickness of Hall sample.
-%           6.corr: float, Correction value based on Scattering Mechanism.
+% Usage:    1.l_NC: float, poles distance.
+%           2.l: float, length of Hall sample.
+%           3.a: float, width of Hall sample.
+%           4.d: float, thickness of Hall sample.
+%           5.corr: float, Correction value based on Scattering Mechanism.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clc;clear;close all;
