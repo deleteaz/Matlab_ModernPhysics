@@ -30,6 +30,7 @@ OpticalPumping(atom_size, time)
 
 CompleteProcess(atom_size, time, voltagetype)
 
+
 function [x_SF1, x_SF2, y_SF1, y_SF2] = Initialize(atom_size) 
 %原子初始化
 arguments
@@ -177,7 +178,7 @@ ylim([-10,10])
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function CompleteProcess(atom_size, time)
+function OpticalPumping(atom_size, time)
 %光抽运
 arguments
     atom_size int32 = 100;
@@ -216,7 +217,7 @@ yline(0)
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function OpticalPumpMagneticResonance(atom_size, time, voltage_type)
+function CompleteProcess(atom_size, time, voltage_type)
 %光泵磁共振
 arguments
     atom_size int32 = 100;
