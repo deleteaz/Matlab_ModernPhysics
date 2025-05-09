@@ -1,4 +1,4 @@
-# ***Simulate the content of modern physics experiments and identify the sources of errors.*** ***物理仿真以确认误差源***
+# ***Simulate the content of modern physics experiments and identify the sources of errors.*** ***物理仿真为误差分析***
 --
 **The program does not contain any AI components, using it with confidence**
 **内不含任何AI,可放心食用**
