@@ -24,7 +24,7 @@ mu_max double = 1e15;
 dmu double = 1e3;
 t_len int32 = 5e4;
 end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Constants
 h = 6.62607015*1e-34; % [Js]
 c = 299792458; % [m/s]
@@ -36,7 +36,7 @@ n = 1 ./ (exp((h*mu)/(k*T)) - 1); % Bose-Einstein Distribution
 Np = poissrnd(n); % Binomial Distribution is approximately Poisson Distribution
 Ep = zeros(size(mu));
 gamma = 10^-(floor(max(log10(n)))+1);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Bose-Einstein Distribution And Initialization of Energy Level Distribution
 figure()
 subplot(1,2,1)
@@ -49,7 +49,7 @@ bar(mu, Np)
 title("初始化能级粒子分布")
 xlabel("频率")
 ylabel("粒子数")
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Blackbody Radiation
 figure()
 B1 = bar(mu, h*mu.^3.*Ep ./ (mu(2)-mu(1)));
@@ -77,7 +77,7 @@ for t = 1:dt:t_len
     end
 end
 drawnow
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 figure()
 hold on
 len = length(Ep);
