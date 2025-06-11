@@ -22,7 +22,7 @@ T double = 5000;
 mu_min double = 2e13;
 mu_max double = 1e15;
 dmu double = 1e3;
-t_len int32 = 5e4
+t_len int32 = 5e4;
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Constants
