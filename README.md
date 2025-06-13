@@ -12,7 +12,7 @@
 6. *变温霍尔效应数据处理工具*
 ...等
 
-**目标用户**：物理专业本科生/爱好者、MATLAB编程初学者
+**目标用户**：物理专业本科生/爱好者、MATLAB编程初学者  
 **AI声明**：内不含任何AI,可放心食用
 
 ## 快速开始
@@ -24,11 +24,11 @@
 - 按照tips修改参数，然后运行(大部分程序可直接运行)
 
 ## 联系我
-作者：ZhiXiang Wei
+作者：ZhiXiang Wei  
 邮箱：3011860885@qq.com
-
+  
 如果有用,给个免费的star呗.
-
+  
 ## 运行效果展示
 ### 电子衍射
 ![理论3](https://github.com/user-attachments/assets/47010b29-ee9d-49ef-a07f-807c17e2d2fb)
@@ -51,10 +51,9 @@
 ![确定峰位](https://github.com/user-attachments/assets/5920114f-6c9a-4000-b041-70a7f6ba3b2e)
 ### 椭圆偏振光
 ![椭圆光谱布儒斯特角](https://github.com/user-attachments/assets/54d40118-0bd4-4a68-a9b1-655f4a2bc804)
-![椭圆光谱角度变换(截面图)](https://github.com/user-attachments/assets/39d6c232-90b3-4679-ba9d-9a2b812d0967)
-...
-...
-...
+![椭圆光谱角度变换(截面图)](https://github.com/user-attachments/assets/39d6c232-90b3-4679-ba9d-9a2b812d0967)  
+...  
+...等
 
 
 
