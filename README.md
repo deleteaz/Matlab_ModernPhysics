@@ -31,8 +31,8 @@
   
 ## 运行效果展示
 ### 电子衍射
-![理论3](https://github.com/user-attachments/assets/47010b29-ee9d-49ef-a07f-807c17e2d2fb)  
-![模拟3](https://github.com/user-attachments/assets/86704cae-126d-472a-b032-5a5a8beef2e1)  
+![理论11](https://github.com/user-attachments/assets/42e37b09-758d-402d-8036-845ab9c73388)  
+![模拟11](https://github.com/user-attachments/assets/2ee18aca-f17c-4883-8458-818b8547b903)  
 ### 激光模式
 ![RE2D11](https://github.com/user-attachments/assets/b38b5049-7b97-4480-a151-72bfff631d6e)  
 ![RE3D11](https://github.com/user-attachments/assets/3038301c-16e9-44bc-bfb3-7abb532e82af)  
