@@ -31,27 +31,27 @@
   
 ## 运行效果展示
 ### 电子衍射
-![理论3](https://github.com/user-attachments/assets/47010b29-ee9d-49ef-a07f-807c17e2d2fb)
-![模拟3](https://github.com/user-attachments/assets/86704cae-126d-472a-b032-5a5a8beef2e1)
+![理论3](https://github.com/user-attachments/assets/47010b29-ee9d-49ef-a07f-807c17e2d2fb)  
+![模拟3](https://github.com/user-attachments/assets/86704cae-126d-472a-b032-5a5a8beef2e1)  
 ### 激光模式
-![RE2D11](https://github.com/user-attachments/assets/b38b5049-7b97-4480-a151-72bfff631d6e)
-![RE3D11](https://github.com/user-attachments/assets/3038301c-16e9-44bc-bfb3-7abb532e82af)
-![RP2D11](https://github.com/user-attachments/assets/fd1e1bd6-96f8-463f-a04d-4cd31fa68444)
-![RP3D11](https://github.com/user-attachments/assets/8a840a8e-a79e-40ac-a564-d8cd432152bc)
-![横波2](https://github.com/user-attachments/assets/e56e1c25-3e80-4994-b8c5-24eebc1b8469)
-![纵波1](https://github.com/user-attachments/assets/bd8a0c4c-deff-451a-8f0d-31366c20676d)
+![RE2D11](https://github.com/user-attachments/assets/b38b5049-7b97-4480-a151-72bfff631d6e)  
+![RE3D11](https://github.com/user-attachments/assets/3038301c-16e9-44bc-bfb3-7abb532e82af)  
+![RP2D11](https://github.com/user-attachments/assets/fd1e1bd6-96f8-463f-a04d-4cd31fa68444)  
+![RP3D11](https://github.com/user-attachments/assets/8a840a8e-a79e-40ac-a564-d8cd432152bc)  
+![横波2](https://github.com/user-attachments/assets/e56e1c25-3e80-4994-b8c5-24eebc1b8469)  
+![纵波1](https://github.com/user-attachments/assets/bd8a0c4c-deff-451a-8f0d-31366c20676d)  
 ### 黑体辐射
-![辐射强度](https://github.com/user-attachments/assets/dc625fdb-f908-43a8-8da1-7fddbaf63a7e)
-![仿真](https://github.com/user-attachments/assets/664cc86b-4ad2-47ca-8645-c232b189cad0)
-![仿真2](https://github.com/user-attachments/assets/b5636589-fe22-4c71-8d6a-14198b7a3bf4)
+![辐射强度](https://github.com/user-attachments/assets/dc625fdb-f908-43a8-8da1-7fddbaf63a7e)  
+![仿真](https://github.com/user-attachments/assets/664cc86b-4ad2-47ca-8645-c232b189cad0)  
+![仿真2](https://github.com/user-attachments/assets/b5636589-fe22-4c71-8d6a-14198b7a3bf4)  
 ### 量子隧穿
-![1 2](https://github.com/user-attachments/assets/964d994b-1ca9-4cc9-822e-0ac89497e66d)
-![解释1 2](https://github.com/user-attachments/assets/4cf88887-872f-495a-85dd-10763fbaaa70)
+![1 2](https://github.com/user-attachments/assets/964d994b-1ca9-4cc9-822e-0ac89497e66d)  
+![解释1 2](https://github.com/user-attachments/assets/4cf88887-872f-495a-85dd-10763fbaaa70)  
 ### 拉曼光谱
-![确定峰位](https://github.com/user-attachments/assets/5920114f-6c9a-4000-b041-70a7f6ba3b2e)
+![确定峰位](https://github.com/user-attachments/assets/5920114f-6c9a-4000-b041-70a7f6ba3b2e)  
 ### 椭圆偏振光
-![椭圆光谱布儒斯特角](https://github.com/user-attachments/assets/54d40118-0bd4-4a68-a9b1-655f4a2bc804)
-![椭圆光谱角度变换(截面图)](https://github.com/user-attachments/assets/39d6c232-90b3-4679-ba9d-9a2b812d0967)  
+![椭圆光谱布儒斯特角](https://github.com/user-attachments/assets/54d40118-0bd4-4a68-a9b1-655f4a2bc804)  
+![椭圆光谱角度变换(截面图)](https://github.com/user-attachments/assets/39d6c232-90b3-4679-ba9d-9a2b812d0967)    
 ...  
 ...等
 
