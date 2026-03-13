@@ -1,4 +1,4 @@
-#  Matlab_ModernPhysics  
+#  ModernPhysicsSimulation  
 **用MATLAB搭建的近代物理可视化实验室**  
 —— 让模式、隧穿、跃迁等抽象概念「看得见、摸得着」  
 
@@ -13,7 +13,6 @@
 ...等
 
 **目标用户**：物理专业本科生/爱好者、MATLAB编程初学者  
-**AI声明**：内不含任何AI,可放心食用
 
 ## 快速开始
 ### 环境要求  
@@ -53,7 +52,8 @@
 ![椭圆光谱布儒斯特角](https://github.com/user-attachments/assets/54d40118-0bd4-4a68-a9b1-655f4a2bc804)
 ![椭圆光谱角度变换(截面图)](https://github.com/user-attachments/assets/39d6c232-90b3-4679-ba9d-9a2b812d0967)  
 ...  
-...等
+...
+敬请探索！
 
 
 
