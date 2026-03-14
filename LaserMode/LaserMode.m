@@ -26,29 +26,30 @@ r = 0.9; % [%]
 N = 100;
 n = 1;
 q = 10000;
+Atype = "pure"; % "noise"/"pure"
 
 %% Process_1
-mode_1(Len_min, Len_max, dLen, r, N, n, q);
+mode_1(Len_min, Len_max, dLen, r, N, n, q, Atype);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Parameter_2
 Apt = 5e-3; % [m]
-Nx = 250;
-Nz = 250;
-display = "phase"; % "intensity"与"phase"
+Nx = 500;
+Nz = 500;
+displayType = "intensity"; % "realTime"/"intensity"/"phase"
 
 %% Process_3
-mode_2(Lam, Len_min, Len_max, dLen, r, N, Apt, Nx, Nz, display);
+mode_2(Lam, Len_min, Len_max, dLen, r, N, n, q, Apt, Nx, Nz, displayType, Atype);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Parameter_3
 m = 1;
 n = 1;
-type = 1;
+Ltype = 1;
 
 %% Process_3
-mode_3(Lam ,Len_min ,Len_max, dLen, m, n, type);
+mode_3(Lam ,Len_min ,Len_max, dLen, m, n, Ltype);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function mode_1(Len_min, Len_max, dLen, r, N, n, q)
+function mode_1(Len_min, Len_max, dLen, r, N, n, q, Atype)
 arguments
     Len_min double = 6e-3;
     Len_max double = 6e-3;
@@ -57,6 +58,7 @@ arguments
     N int32 = 100;
     n int32 = 1;
     q int32 = 10000;
+    Atype string = "pure";
 end
 figure()
 hold on
@@ -83,8 +85,11 @@ for iLen = 1:Len_l
     mu = center_freq + (-2.5*FSR:0.005*FSR:2.5*FSR)';
     phi = 4*pi*n*Len*mu/c;
     for k = 1:N
-        % A_add = 0.05 + 0.05*exp(-1i*(phi-5.9*k));
-        A_add = 0.1;
+        if (Atype == "pure")
+            A_add = 0.1;
+        elseif (Atype == "noise")
+            A_add = 0.05 + 0.05*exp(-1i*(phi-5.9*k));
+        end
         A_total = r * A_total .* exp(-1i*phi);
         A_total = A_total + A_add;
         I = abs(A_total).^2;
@@ -101,7 +106,7 @@ for iLen = 1:Len_l
 end
 drawnow
 
-figure("Position", [0, 0, 700, 400]);
+figure();
 mu = [center_freq, center_freq + 0.5*FSR];
 A_total = zeros(1,length(mu));
 I = zeros(N,length(mu));
@@ -127,8 +132,12 @@ grid on
 set(gca,"FontSize",13,"Box","on","LineWidth",2,"Xtick",-1:0.5:1);
 for k = 1:N
     phi = 4*pi*n*Len*mu/c;
-    A_new = 0.1;
-    A_total = r * A_total .* exp(-1i*phi) + A_new;
+    if (Atype == "pure")
+        A_add = 0.1;
+    elseif (Atype == "noise")
+        A_add = 0.05 + 0.05*exp(-1i*(phi-5.9*k));
+    end
+    A_total = r * A_total .* exp(-1i*phi) + A_add;
     I(k,:) = abs(A_total).^2;
     set(sg1, "String", sprintf("往返次数: %d", k))
     set(h1, "XData",real(A_total(1)), "YData",imag(A_total(1)));
@@ -158,7 +167,7 @@ grid on
 set(gca,"FontSize",15,"Box","on","LineWidth",2);
 end
 
-function mode_2(Lam, Len_min, Len_max, dLen, r, N, Apt, Nx, Nz, display)
+function mode_2(Lam, Len_min, Len_max, dLen, r, N, n, q, Apt, Nx, Nz, displayType, Atype)
 arguments
     Lam double = 632.8e-9;
     Len_min double = 6e-3;
@@ -166,91 +175,104 @@ arguments
     dLen double = 1e-6;
     r double = 0.9;
     N int32 = 100;
+    n int32 = 1;
+    q int32 = 10000;
     Apt double = 5e-3;
     Nx int32 = 250;
     Nz int32 = 250;
-    display string = "phase";
+    displayType string = "intensity";
+    Atype string = "pure";
 end
+Lam = Lam * 1e6;
 Len_range = Len_min:dLen:Len_max; % [m]
+Len_range = Len_range * 1e2;
+Apt = Apt * 1e3;
 N = double(N); Nx = double(Nx); Nz = double(Nz);
 for iLen = 1:length(Len_range)
     Len = Len_range(iLen);
-    x = linspace(-Apt*3, Apt*3, Nx);
+    x = linspace(-Apt*5, Apt*5, Nx);
     z = linspace(0, Len, Nz);
+    dx = x(2)-x(1);
+    dz = z(2)-z(1);
     [X, Z] = meshgrid(x, z);
 
-    Apt_width = Apt/2;
     k = 2*pi/Lam;
-    zR = pi*Apt_width^2/Lam;
+    deltaW = 0.5;
 
-    A = exp(-X.^2/Apt_width^2);
-    R2 = X.^2;
-    R2z = R2 + zR^2;
-    phi = k*Z - atan(Z/zR) + k*R2./(2*R2z);
+    fx = (-Nx/2:Nx/2-1)/(Nx*dx);
+    H = exp(-1i*pi*Lam*fx.^2*dz);
+    H_forward = fftshift(H);
+    H_backward = conj(H_forward);
 
-    if display == "intensity"
-        field = A .* exp(1i*phi);
-    else
-        field = phi;
-    end
+    % Mask_R = double(abs(x) < Apt);
+    Mask_R = 1;
+    GuassL = exp(-X(1,:).^2 / (deltaW^2 + 1e-9));
+    Ef = zeros(Nz, Nx); 
+    Eb = zeros(Nz, Nx); 
 
     figure();
     hold on;
-    h_img = imagesc(x*1e3, z, abs(field).^2);
+    h_img = imagesc(x*1e3, z, Ef);
     plot(x*1e3, 0, 'k-', 'LineWidth', 2);
     plot(x*1e3, 0 + Len, 'k-', 'LineWidth',2);
-    rectangle('Position', [-Apt*1e3, -0.05*Len, 2*Apt*1e3, 0.1*Len],...
+    rectangle('Position', [-Apt*1e3, -0.08*Len, 2*Apt*1e3, 0.1*Len],...
         'FaceColor', [0.7,0.7,0.7], 'EdgeColor', 'none');
-    rectangle('Position', [-Apt*1e3, Len-0.05*Len, 2*Apt*1e3, 0.1*Len],...
+    rectangle('Position', [-Apt*1e3, Len-0.02*Len, 2*Apt*1e3, 0.1*Len],...
         'FaceColor', [0.7,0.7,0.7], 'EdgeColor', 'none');
+    txt = text(0.05, 0.9, sprintf("往返次数 = %d", 0), "FontSize", 12, "FontWeight","bold", "Units", "normalized");
     xlabel('横向位置(mm)');
     ylabel('纵向位置(m)');
     title('谐振腔内光场传播');
     set(gca, "XTick",[],"YTick",[])
-    daspect([500,1,1])
-
-    dx = x(2)-x(1);
-    dz = z(2)-z(1);
-    fx = (-Nx/2:Nx/2-1)/(Nx*dx);
-    H = exp(-1i*pi*Lam*fx.^2*dz);
-    H = fftshift(H);
-    mask_R = double(abs(x) < Apt);
 
     for t = 1:N
-        for i = 2:Nz
-            ifield = field(i-1, :);
-            F = fft(ifield);
-            F = F .* H;
-            field(i, :) = ifft(F);
-            field(i, :) = field(i, :) .* exp(1i*k*dz);
+        phi = 2 * k * Len; 
+        if (Atype == "pure")
+            A_add = 0.1;
+        elseif (Atype == "noise")
+            A_add = 0.05 + 0.05*exp(-1i*(phi-5.9*t));
         end
-        field(end, :) = r * field(end, :) .* mask_R;
-        for i = (Nz-1):-1:1
-            ifield = field(i+1, :);
-            F = fft(ifield);
-            F = F .* H;
-            field(i, :) = ifft(F);
-            field(i, :) = field(i, :) .* exp(1i*k*dz);
-        end
+        Ef(1,:) = Ef(1,:) + GuassL .* A_add .* Mask_R;
 
-        field(1, :) = r * field(1, :) .* mask_R;
-        % field = field / max(abs(field(:)));
-        if display == "intensity"
-            colormap("colorcube");
-            intensity = abs(field).^2;
-            set(h_img, 'CData', intensity);
-        else
-            colormap(jet(256))
-            phase_data = angle(field);
-            set(h_img, 'CData', phase_data);
+        for i = 2:Nz
+            U_prev = Ef(i-1, :);
+            F_spec = fft(U_prev);
+            F_prop = F_spec .* H_forward;
+            Ef(i, :) = ifft(F_prop);
         end
+        Eb(end, :) = -r * Ef(end, :) .* Mask_R;
+
+        for i = (Nz-1):-1:1
+            U_prev = Eb(i+1, :);
+            F_spec = fft(U_prev);
+            F_prop = F_spec .* H_backward;
+            Eb(i, :) = ifft(F_prop);
+        end
+        Ef(1, :) = -r * Eb(1, :) .* Mask_R;
+
+        Etot = Ef + Eb;
+
+        if displayType == "realTime"
+            colormap("default");
+            intensity = real(Etot);
+            set(h_img, 'CData', intensity);
+        elseif displayType == "intensity"
+            colormap("default");
+            intensity = log10(abs(Etot).^2 + 1e-6);
+            set(h_img, 'CData', intensity);
+        elseif displayType == "phase"
+            colormap(jet(20))
+            phase = angle(Etot);
+            set(h_img, 'CData', phase);
+        end
+        set(txt, "String", sprintf("往返次数 = %d", t))
         drawnow
     end
     drawnow
 end
 end
 
-function mode_3(Lam ,Len_min ,Len_max, dLen, m, n, type)
+function mode_3(Lam ,Len_min ,Len_max, dLen, m, n, Ltype)
 arguments
     Lam double = 632.8e-9;
     Len_min double = 6e-3;
@@ -258,13 +280,13 @@ arguments
     dLen double = 1e-6;
     m int32 = 1;
     n int32 = 1;
-    type int32 = 1;
+    Ltype int32 = 1;
 end
 m = double(m); n = double(n);
 Len_range = Len_min:dLen:Len_max; % [m]
 for iLen = 1:length(Len_range)
     Len = Len_range(iLen); % [m]
-    if type < 2
+    if Ltype < 2
         alpha = sqrt((2*pi)/(Len*Lam));
         omega = Len*Lam/pi;
 
